@@ -1,0 +1,1713 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>កម្រងសំណួរ Data Structures & Algorithms</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Khmer OS', 'Moul', 'Noto Sans Khmer', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            padding: 30px 35px;
+            transition: all 0.3s ease;
+        }
+
+        #studentInfo {
+            display: block;
+        }
+        #studentInfo h2 {
+            text-align: center;
+            color: #1a2a4a;
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #2d3d56;
+            margin-bottom: 6px;
+            font-size: 15px;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #dce1ec;
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+            background: #f8faff;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #4a6cf7;
+            outline: none;
+            background: #fff;
+        }
+        .btn-start {
+            width: 100%;
+            padding: 16px;
+            background: #4a6cf7;
+            color: #fff;
+            border: none;
+            border-radius: 40px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(74, 108, 247, 0.35);
+            transition: all 0.25s ease;
+            font-family: inherit;
+            margin-top: 10px;
+        }
+        .btn-start:hover {
+            background: #3a5cd9;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(74, 108, 247, 0.4);
+        }
+
+        #quizSection {
+            display: none;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #4a6cf7;
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 26px;
+            color: #1a2a4a;
+            letter-spacing: 0.5px;
+            cursor: default;
+            user-select: none;
+        }
+
+        .header .sub {
+            font-size: 15px;
+            color: #6b7a8f;
+            margin-top: 6px;
+        }
+
+        .student-badge {
+            background: #f0f4ff;
+            border-radius: 30px;
+            padding: 8px 18px;
+            display: inline-block;
+            font-size: 14px;
+            color: #1a2a4a;
+            margin-top: 8px;
+            border: 1px solid #dce6ff;
+        }
+        .student-badge strong {
+            color: #4a6cf7;
+        }
+
+        .timer-text {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a2a4a;
+            text-align: center;
+            margin-top: 4px;
+        }
+        .timer-text .time {
+            color: #4a6cf7;
+        }
+        .timer-text .time.warning {
+            color: #dc3545;
+        }
+
+        .timer-bar {
+            background: #e9ecf2;
+            border-radius: 30px;
+            height: 10px;
+            margin: 8px 0 8px;
+            overflow: hidden;
+        }
+        .timer-fill {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, #28a745, #4a6cf7);
+            border-radius: 30px;
+            transition: width 1s linear;
+        }
+        .timer-fill.warning {
+            background: linear-gradient(90deg, #ffc107, #dc3545);
+        }
+        .timer-fill.danger {
+            background: #dc3545;
+        }
+
+        .progress-bar {
+            background: #e9ecf2;
+            border-radius: 30px;
+            height: 8px;
+            margin: 8px 0 8px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #4a6cf7, #6a4cf7);
+            border-radius: 30px;
+            transition: width 0.4s ease;
+        }
+
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #3d4a5c;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .question-card {
+            background: #f8faff;
+            border-radius: 18px;
+            padding: 25px 28px;
+            margin-bottom: 25px;
+            border-left: 6px solid #4a6cf7;
+        }
+        .q-number {
+            font-weight: 700;
+            color: #4a6cf7;
+            font-size: 15px;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .q-text {
+            font-size: 20px;
+            line-height: 1.6;
+            color: #1a2a3a;
+            font-weight: 500;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+        .option {
+            background: #f1f4fc;
+            border-radius: 14px;
+            padding: 16px 22px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 17px;
+            color: #1d2b3e;
+        }
+        .option:hover {
+            background: #e6ecf9;
+            border-color: #b3c6f0;
+        }
+        .option.selected {
+            background: #dce6ff;
+            border-color: #4a6cf7;
+            box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.15);
+        }
+        .option.correct-answer {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        .option.wrong-answer {
+            background: #f8dddd;
+            border-color: #dc3545;
+        }
+        .option .letter {
+            font-weight: 700;
+            color: #4a6cf7;
+            background: #ffffff;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .option .text {
+            flex: 1;
+        }
+
+        .explanation-box {
+            background: #f0f4ff;
+            border-radius: 14px;
+            padding: 18px 22px;
+            margin: 10px 0 22px;
+            border-left: 5px solid #4a6cf7;
+            display: none;
+        }
+        .explanation-box.show {
+            display: block;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 5px;
+        }
+
+        .btn {
+            padding: 13px 32px;
+            border: none;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: inherit;
+        }
+        .btn-primary {
+            background: #4a6cf7;
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(74, 108, 247, 0.3);
+        }
+        .btn-primary:hover {
+            background: #3a5cd9;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(74, 108, 247, 0.35);
+        }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .btn-secondary {
+            background: #e9ecf2;
+            color: #2d3d56;
+        }
+        .btn-secondary:hover {
+            background: #d5dae4;
+        }
+        .btn-success {
+            background: #28a745;
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+        }
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+        .btn-outline {
+            background: transparent;
+            color: #4a6cf7;
+            border: 2px solid #4a6cf7;
+        }
+        .btn-outline:hover {
+            background: #4a6cf7;
+            color: #fff;
+        }
+        .btn-excel {
+            background: #1d6f42;
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(29, 111, 66, 0.3);
+        }
+        .btn-excel:hover {
+            background: #155a34;
+            transform: translateY(-2px);
+        }
+        .btn-danger {
+            background: #dc3545;
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .result-box {
+            display: none;
+            text-align: center;
+            padding: 40px 20px 30px;
+        }
+        .result-box.show {
+            display: block;
+        }
+
+        .result-header {
+            background: #f0f4ff;
+            border-radius: 16px;
+            padding: 18px 25px;
+            margin-bottom: 30px;
+            text-align: left;
+            border-left: 6px solid #4a6cf7;
+        }
+        .result-header p {
+            margin: 4px 0;
+            font-size: 16px;
+            color: #1a2a4a;
+        }
+        .result-header span {
+            font-weight: 600;
+            color: #4a6cf7;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4a6cf7, #6a4cf7);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 12px 40px rgba(74, 108, 247, 0.35);
+        }
+        .score-circle .number {
+            font-size: 52px;
+            font-weight: 800;
+            line-height: 1;
+        }
+        .score-circle .label {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .grade {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 8px 0 6px;
+        }
+        .detail {
+            color: #4a5a6e;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin: 18px 0 25px;
+        }
+        .stats .stat-item {
+            text-align: center;
+        }
+        .stats .stat-item .num {
+            font-size: 28px;
+            font-weight: 700;
+        }
+        .stats .stat-item .lbl {
+            font-size: 14px;
+            color: #6b7a8f;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .toast {
+            visibility: hidden;
+            min-width: 250px;
+            background: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 30px;
+            padding: 12px 24px;
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            font-size: 16px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        .toast.show {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .timer-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+        }
+        .timer-overlay.show {
+            display: flex;
+        }
+        .timer-overlay-box {
+            background: #fff;
+            border-radius: 24px;
+            padding: 40px 50px;
+            text-align: center;
+            max-width: 450px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        .timer-overlay-box .icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+        .timer-overlay-box h2 {
+            color: #dc3545;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        .timer-overlay-box p {
+            color: #4a5a6e;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        /* ===== Admin Panel (hidden from students) ===== */
+        .admin-panel {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 16px;
+            border: 2px dashed #4a6cf7;
+        }
+        .admin-panel.show {
+            display: block;
+        }
+        .admin-panel h3 {
+            color: #1a2a4a;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .admin-panel table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        .admin-panel th,
+        .admin-panel td {
+            border: 1px solid #dce1ec;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        .admin-panel th {
+            background: #4a6cf7;
+            color: #fff;
+        }
+        .admin-panel td {
+            background: #fff;
+        }
+        .admin-panel .btn-group {
+            justify-content: center;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 18px 16px;
+            }
+            .q-text {
+                font-size: 17px;
+            }
+            .option {
+                padding: 14px 16px;
+                font-size: 15px;
+            }
+            .btn {
+                padding: 11px 20px;
+                font-size: 14px;
+                flex: 1 1 100%;
+            }
+            .btn-group {
+                gap: 8px;
+            }
+            .header h1 {
+                font-size: 20px;
+            }
+            .score-circle {
+                width: 120px;
+                height: 120px;
+            }
+            .score-circle .number {
+                font-size: 40px;
+            }
+            .result-header {
+                padding: 14px 16px;
+                font-size: 14px;
+            }
+            .action-buttons .btn {
+                flex: 1 1 100%;
+            }
+            .timer-overlay-box {
+                padding: 30px 20px;
+                margin: 0 15px;
+            }
+            .admin-panel table {
+                font-size: 12px;
+            }
+            .admin-panel th,
+            .admin-panel td {
+                padding: 4px 6px;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+        .mt-10 {
+            margin-top: 10px;
+        }
+        .text-center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="app">
+        <div id="toast" class="toast">📋 ចម្លងជោគជ័យ!</div>
+
+        <div class="timer-overlay" id="timerOverlay">
+            <div class="timer-overlay-box">
+                <div class="icon">⏰</div>
+                <h2>ម៉ោងប្រឡងបានអស់!</h2>
+                <p>សូមអធ្យាស្រ័យ អ្នកមិនអាចឆ្លើយសំណួរបន្ថែមទៀតបានទេ។<br>
+                ប្រព័ន្ធនឹងបង្ហាញលទ្ធផលដោយស្វ័យប្រវត្តិ។</p>
+                <button class="btn btn-primary" id="viewResultBtn">📊 មើលលទ្ធផល</button>
+            </div>
+        </div>
+
+        <!-- STUDENT INFO -->
+        <div id="studentInfo">
+            <h2>📋 ព័ត៌មាននិស្សិត</h2>
+            <form id="studentForm">
+                <div class="form-group">
+                    <label for="studentName">ឈ្មោះនិស្សិត</label>
+                    <input type="text" id="studentName" placeholder="ឧ. សុខ សុភក្តិ" required>
+                </div>
+                <div class="form-group">
+                    <label for="studentID">លេខសម្គាល់ (ID)</label>
+                    <input type="text" id="studentID" placeholder="ឧ. S-2025-001" required>
+                </div>
+                <div class="form-group">
+                    <label for="studentGroup">ក្រុម</label>
+                    <input type="text" id="studentGroup" placeholder="ឧ. ក្រុម A">
+                </div>
+                <div class="form-group">
+                    <label for="studentShift">វេនសិក្សា</label>
+                    <select id="studentShift">
+                        <option value="ព្រឹក">ព្រឹក</option>
+                        <option value="រសៀល">រសៀល</option>
+                        <option value="យប់">យប់</option>
+                        <option value="ចុងសប្តាហ៍">ចុងសប្តាហ៍</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-start">🚀 ចាប់ផ្តើមប្រឡង (៦០ នាទី)</button>
+            </form>
+        </div>
+
+        <!-- QUIZ -->
+        <div id="quizSection">
+            <div class="header">
+                <h1 id="headerTitle">📘 កម្រងសំណួរ DSA</h1>
+                <div class="sub">ឆ្នាំទី២ ឆមាសទី២ &bull; ៥០ សំណួរ &bull; ៦០ នាទី</div>
+                <div class="student-badge" id="studentBadge">
+                    <strong id="displayName">ឈ្មោះ</strong> &bull; ID: <strong id="displayID">-</strong> &bull; ក្រុម:
+                    <strong id="displayGroup">-</strong> &bull; វេន: <strong id="displayShift">-</strong>
+                </div>
+                <div class="timer-text" id="timerText">
+                    ⏱ ម៉ោងនៅសល់: <span class="time" id="timerDisplay">60:00</span>
+                </div>
+                <div class="timer-bar">
+                    <div class="timer-fill" id="timerFill"></div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="status-row">
+                    <span id="qCounter">សំណួរ ១ / ៥០</span>
+                    <span id="scoreDisplay">ឆ្លើយរួច ០ / ៥០</span>
+                </div>
+            </div>
+
+            <div id="questionArea">
+                <div class="question-card">
+                    <span class="q-number" id="qNumber">សំណួរទី ១</span>
+                    <div class="q-text" id="qText">កំពុងផ្ទុក...</div>
+                </div>
+                <div class="options" id="optionsContainer"></div>
+                <div class="explanation-box" id="explanationBox">
+                    <div class="label">📖 ការពន្យល់</div>
+                    <div class="content" id="explanationText"></div>
+                </div>
+                <div class="btn-group">
+                    <div>
+                        <button class="btn btn-secondary" id="prevBtn" disabled>← មុន</button>
+                        <button class="btn btn-secondary" id="resetBtn">↺ ចាប់ផ្ដើមថ្មី</button>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary" id="nextBtn">បន្ទាប់ →</button>
+                        <button class="btn btn-success hidden" id="submitBtn">📊 បញ្ចប់</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RESULT -->
+            <div class="result-box" id="resultBox">
+                <div class="result-header">
+                    <p><span>ឈ្មោះ៖</span> <span id="resultName"></span></p>
+                    <p><span>ID៖</span> <span id="resultID"></span></p>
+                    <p><span>ក្រុម៖</span> <span id="resultGroup"></span> &nbsp;|&nbsp; <span>វេន៖</span> <span
+                            id="resultShift"></span></p>
+                    <p><span>កាលបរិច្ឆេទប្រឡង៖</span> <span id="resultDate"></span></p>
+                </div>
+                <div class="score-circle">
+                    <span class="number" id="finalScore">0</span>
+                    <span class="label">ពិន្ទុ / ១០០</span>
+                </div>
+                <div class="grade" id="gradeText"></div>
+                <div class="detail" id="gradeDetail"></div>
+                <div class="stats">
+                    <div class="stat-item"><div class="num" id="correctCount">0</div><div class="lbl">ត្រឹមត្រូវ</div></div>
+                    <div class="stat-item"><div class="num" id="wrongCount">0</div><div class="lbl">ខុស</div></div>
+                    <div class="stat-item"><div class="num" id="unansweredCount">0</div><div class="lbl">មិនទាន់ឆ្លើយ</div></div>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="downloadPDFBtn">📥 PDF</button>
+                    <button class="btn btn-excel" id="downloadExcelBtn">📊 Excel</button>
+                    <button class="btn btn-outline" id="copyTelegramBtn">📋 Telegram</button>
+                    <button class="btn btn-secondary" id="retryBtn">🔄 ធ្វើម្តងទៀត</button>
+                    <button class="btn btn-secondary" id="changeInfoBtn">✏️ ប្តូរព័ត៌មាន</button>
+                </div>
+            </div>
+
+            <!-- ADMIN PANEL (hidden, revealed by clicking title 5 times) -->
+            <div class="admin-panel" id="adminPanel">
+                <h3>📊 ទិន្នន័យនិស្សិតទាំងអស់ (លាក់កំបាំង)</h3>
+                <div style="overflow-x:auto;">
+                    <table id="adminTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>ឈ្មោះ</th>
+                                <th>ក្រុម</th>
+                                <th>វេន</th>
+                                <th>កាលបរិច្ឆេទ</th>
+                                <th>ពិន្ទុ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminTableBody">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-excel" id="adminDownloadExcel">📊 ទាញយក Excel ទាំងអស់</button>
+                    <button class="btn btn-danger" id="adminClearData">🗑️ សម្អាតទិន្នន័យ</button>
+                    <button class="btn btn-secondary" id="adminClose">🔒 បិទ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        //  DATA: 50 QUESTIONS (Same as before)
+        // ============================================================
+        const questions = [{
+                id: 1,
+                question: 'តើទិន្នន័យប្រភេទណាខាងក្រោមដែល **មិនអាចផ្លាស់ប្តូរបាន (immutable)**?',
+                options: ['List', 'Dictionary', 'Tuple', 'Set'],
+                correct: 2,
+                explanation: 'Tuple គឺជា immutable មានន័យថាមិនអាចបន្ថែម កែប្រែ ឬលុបធាតុបានទេ។'
+            },
+            {
+                id: 2,
+                question: 'តើប្រតិបត្តិករណាខាងក្រោមប្រើសម្រាប់ពិនិត្យមើលថាតើតម្លៃមួយមានក្នុងបញ្ជីឬអត់?',
+                options: ['`is`', '`==`', '`in`', '`and`'],
+                correct: 2,
+                explanation: '`in` ជា membership operator ប្រើដើម្បីពិនិត្យថាតើតម្លៃមួយមានក្នុង sequence ឬអត់។'
+            },
+            {
+                id: 3,
+                question: 'តើអ្វីជាលទ្ធផលនៃកូដ `print(type(10.5))`?',
+                options: ['<class "int">', '<class "float">', '<class "complex">', '<class "str">'],
+                correct: 1,
+                explanation: '10.5 ជា floating-point number ដូច្នេះ type គឺ `float`។'
+            },
+            {
+                id: 4,
+                question: 'តើមុខងារមួយណាខាងក្រោមប្រើដើម្បីបង្កើត set ដែលមិនអាចផ្លាស់ប្តូរបាន (immutable set)?',
+                options: ['`set()`', '`frozenset()`', '`dict()`', '`list()`'],
+                correct: 1,
+                explanation: '`frozenset()` បង្កើត set ដែល immutable មិនអាចបន្ថែម ឬលុបធាតុបានទេ។'
+            },
+            {
+                id: 5,
+                question: 'តើ `defaultdict` ខុសពី dictionary ធម្មតាយ៉ាងដូចម្តេច?',
+                options: ['វារក្សាលំដាប់នៃ keys', 'វាមិនដែល raise KeyError ទេ', 'វាអាចផ្ទុកតម្លៃបានច្រើនជាងមួយ',
+                    'វាលឿនជាង dictionary ធម្មតា'
+                ],
+                correct: 1,
+                explanation: '`defaultdict` ផ្តល់តម្លៃលំនាំដើម (default value) នៅពេលដែល key មិនទាន់មាន ដូច្នេះវាមិន raise KeyError ទេ។'
+            },
+            {
+                id: 6,
+                question: 'តើប្រតិបត្តិករ `is` ប្រើសម្រាប់អ្វី?',
+                options: ['ប្រៀបធៀបតម្លៃ', 'ប្រៀបធៀបអត្តសញ្ញាណ (identity) នៃវត្ថុ', 'ពិនិត្យសមាជិកភាព',
+                    'ប្រមាណវិធីតក្កវិជ្ជា'
+                ],
+                correct: 1,
+                explanation: '`is` ពិនិត្យថាតើអថេរពីរសំដៅទៅលើវត្ថុដូចគ្នាឬអត់ (identity comparison)។'
+            },
+            {
+                id: 7,
+                question: 'តើទិន្នន័យប្រភេទណាដែលអនុញ្ញាតឱ្យមានតម្លៃស្ទួន (duplicate values)?',
+                options: ['Set', 'Dictionary (keys)', 'List', 'Frozenset'],
+                correct: 2,
+                explanation: 'List អនុញ្ញាតឱ្យមានតម្លៃស្ទួន ខណៈ set និង frozenset មិនអនុញ្ញាត ហើយ keys របស់ dictionary ក៏មិនអនុញ្ញាតដែរ។'
+            },
+            {
+                id: 8,
+                question: 'តើ `Counter` ក្នុង `collections` module ប្រើសម្រាប់អ្វី?',
+                options: ['រាប់ចំនួន hashable objects', 'តម្រៀបបញ្ជី', 'ផ្សំ dictionaries',
+                    'បង្កើត tuple ដែលមានឈ្មោះ'
+                ],
+                correct: 0,
+                explanation: '`Counter` គឺជា subclass របស់ dict ដែលប្រើសម្រាប់រាប់ចំនួន hashable objects។'
+            },
+            {
+                id: 9,
+                question: 'តើ `deque` មានអត្ថប្រយោជន៍អ្វីជាង list ធម្មតា?',
+                options: ['អាចចូលដំណើរការតាម index បានលឿនជាង',
+                    'បន្ថែម និងលុបធាតុពីចុងទាំងពីរបានលឿន O(1)', 'ប្រើអង្គចងចាំតិចជាង',
+                    'អាចផ្ទុកទិន្នន័យគ្រប់ប្រភេទ'
+                ],
+                correct: 1,
+                explanation: '`deque` (double-ended queue) គាំទ្រការបន្ថែម និងលុបធាតុពីចុងទាំងពីរដោយ O(1) ខណៈ list ត្រូវការ O(n) សម្រាប់ការបន្ថែម/លុបនៅដើមបញ្ជី។'
+            },
+            {
+                id: 10,
+                question: 'តើកូដ `print(list(range(5, 0, -2)))` ផ្តល់លទ្ធផលអ្វី?',
+                options: ['`[5, 3, 1]`', '`[5, 4, 3, 2, 1]`', '`[5, 3, 1, -1]`', '`[5, 3]`'],
+                correct: 0,
+                explanation: '`range(5, 0, -2)` ចាប់ផ្តើមពី 5 ថយចុះ 2 រាល់ដង រហូតដល់ធំជាង 0 បាន `[5, 3, 1]`។'
+            },
+            {
+                id: 11,
+                question: 'តើ Big O notation ប្រើសម្រាប់អ្វី?',
+                options: ['វាស់ពេលវេលាប្រតិបត្តិពិតប្រាកដ', 'វាស់ព្រំដែនខាងលើ (upper bound) នៃភាពស្មុគស្មាញ',
+                    'វាស់ព្រំដែនខាងក្រោម (lower bound)', 'វាស់ព្រំដែនតឹង (tight bound)'
+                ],
+                correct: 1,
+                explanation: 'Big O បង្ហាញពីដែនកំណត់ខាងលើ (worst-case) នៃការរីកចម្រើននៃពេលវេលាប្រតិបត្តិរបស់ algorithm។'
+            },
+            {
+                id: 12,
+                question: 'តើភាពស្មុគស្មាញពេលវេលានៃ binary search គឺជាអ្វី?',
+                options: ['O(n)', 'O(log n)', 'O(n log n)', 'O(n²)'],
+                correct: 1,
+                explanation: 'Binary search កាត់បញ្ជីពាក់កណ្តាលរាល់ជំហាន ដូច្នេះភាពស្មុគស្មាញគឺ O(log n)។'
+            },
+            {
+                id: 13,
+                question: 'តើ algorithm មួយណាដែលប្រើ Divide and Conquer?',
+                options: ['Bubble Sort', 'Merge Sort', 'Selection Sort', 'Insertion Sort'],
+                correct: 1,
+                explanation: 'Merge Sort បែងចែកបញ្ជីជាពីរផ្នែក តម្រៀបផ្នែកនីមួយៗ រួចបញ្ចូលគ្នា (Divide and Conquer)។'
+            },
+            {
+                id: 14,
+                question: 'តើ Dynamic Programming ខុសពី Divide and Conquer យ៉ាងដូចម្តេច?',
+                options: ['Dynamic Programming ប្រើ recursion', 'Dynamic Programming រក្សាទុកលទ្ធផលនៃ subproblems ដើម្បីប្រើឡើងវិញ',
+                    'Divide and Conquer លឿនជាង', 'មិនខុសគ្នាទេ'
+                ],
+                correct: 1,
+                explanation: 'Dynamic Programming ប្រើ memoization ដើម្បីរក្សាទុកលទ្ធផលនៃ subproblems ដដែលៗ ដើម្បីចៀសវាងការគណនាឡើងវិញ។'
+            },
+            {
+                id: 15,
+                question: 'តើអ្វីជាភាពស្មុគស្មាញពេលវេលានៃកូដខាងក្រោម?<br><code>for i in range(n):<br>&nbsp;&nbsp;for j in range(n):<br>&nbsp;&nbsp;&nbsp;&nbsp;print(i, j)</code>',
+                options: ['O(n)', 'O(log n)', 'O(n²)', 'O(n log n)'],
+                correct: 2,
+                explanation: 'រង្វិលជុំជាប់គ្នា (nested loop) ពីរជាន់ ប្រតិបត្តិ n × n = n² ដង ដូច្នេះ O(n²)។'
+            },
+            {
+                id: 16,
+                question: 'តើ Greedy Algorithm មានលក្ខណៈពិសេសអ្វី?',
+                options: ['តែងតែផ្តល់ដំណោះស្រាយល្អបំផុតជានិច្ច',
+                    'ជ្រើសរើសដំណោះស្រាយល្អបំផុតនៅជំហាននីមួយៗ (local optimum)',
+                    'ប្រើ recursion ជានិច្ច', 'មិនអាចប្រើសម្រាប់ optimization problems'
+                ],
+                correct: 1,
+                explanation: 'Greedy algorithm ជ្រើសរើសដំណោះស្រាយដែលមើលទៅល្អបំផុតនៅពេលនោះ (local optimum) ដោយសង្ឃឹមថានឹងនាំទៅរក global optimum។'
+            },
+            {
+                id: 17,
+                question: 'តើ amortized analysis ប្រើសម្រាប់អ្វី?',
+                options: ['វិភាគករណីអាក្រក់បំផុត', 'វិភាគការចំណាយជាមធ្យមនៃប្រតិបត្តិការជាបន្តបន្ទាប់',
+                    'វិភាគករណីល្អបំផុត', 'វិភាគការប្រើប្រាស់អង្គចងចាំ'
+                ],
+                correct: 1,
+                explanation: 'Amortized analysis គណនាការចំណាយជាមធ្យមនៃប្រតិបត្តិការក្នុងមួយជំហាន សម្រាប់ប្រតិបត្តិការជាច្រើនដង។'
+            },
+            {
+                id: 18,
+                question: 'តើអ្វីជាភាពស្មុគស្មាញនៃកូដខាងក្រោម?<br><code>i = 1<br>while i < n:<br>&nbsp;&nbsp;i *= 2</code>',
+                options: ['O(n)', 'O(log n)', 'O(n²)', 'O(1)'],
+                correct: 1,
+                explanation: 'i កើនឡើងជាលំដាប់ 2, 4, 8, ... រហូតដល់ n ដូច្នេះចំនួនជំហានគឺ log₂(n)។'
+            },
+            {
+                id: 19,
+                question: 'តើ Theta (Θ) notation បង្ហាញពីអ្វី?',
+                options: ['ព្រំដែនខាងលើ', 'ព្រំដែនខាងក្រោម', 'ព្រំដែនតឹង (tight bound)',
+                    'ពេលវេលាប្រតិបត្តិពិតប្រាកដ'
+                ],
+                correct: 2,
+                explanation: 'Θ notation ផ្តល់ទាំងព្រំដែនខាងលើ និងខាងក្រោម (tight bound) សម្រាប់ភាពស្មុគស្មាញនៃ algorithm។'
+            },
+            {
+                id: 20,
+                question: 'តើ recursion ត្រូវការលក្ខខណ្ឌអ្វីខ្លះដើម្បីជៀសវាង infinite loop?',
+                options: ['Base case', 'Recursive case', 'ទាំង base case និង recursive case',
+                    'មិនត្រូវការអ្វីទាំងអស់'
+                ],
+                correct: 2,
+                explanation: 'Recursive function ត្រូវការ base case (លក្ខខណ្ឌបញ្ឈប់) និង recursive case (ការហៅខ្លួនឯងដែលខិតទៅរក base case) ដើម្បីចៀសវាង infinite loop។'
+            },
+            {
+                id: 21,
+                question: 'តើ linked list មានអត្ថប្រយោជន៍អ្វីជាង array?',
+                options: ['ចូលដំណើរការតាម index លឿនជាង', 'ប្រើអង្គចងចាំតិច',
+                    'បន្ថែម និងលុបធាតុនៅកណ្តាលបានលឿនជាង (O(1) ប្រសិនបើមាន pointer)',
+                    'ងាយស្រួលក្នុងការស្វែងរក'
+                ],
+                correct: 2,
+                explanation: 'Linked list អនុញ្ញាតឱ្យបន្ថែម ឬលុបធាតុនៅកណ្តាលដោយគ្រាន់តែផ្លាស់ប្តូរ pointers ដែល O(1) ខណៈ array ត្រូវការផ្លាស់ទីធាតុទាំងអស់។'
+            },
+            {
+                id: 22,
+                question: 'តើ stack ដំណើរការតាមគោលការណ៍អ្វី?',
+                options: ['FIFO (First In First Out)', 'LIFO (Last In First Out)', 'FILO (First In Last Out)',
+                    'ទាំង B និង C'
+                ],
+                correct: 1,
+                explanation: 'Stack ដំណើរការតាម LIFO – ធាតុដែលដាក់ចូលចុងក្រោយ គឺត្រូវយកចេញមុនគេ។'
+            },
+            {
+                id: 23,
+                question: 'តើប្រតិបត្តិការអ្វីខ្លះដែលអាចធ្វើលើ stack?',
+                options: ['enqueue និង dequeue', 'push និង pop', 'insert និង delete', 'append និង remove'],
+                correct: 1,
+                explanation: 'ប្រតិបត្តិការសំខាន់លើ stack គឺ push (ដាក់ចូល) និង pop (យកចេញ)។'
+            },
+            {
+                id: 24,
+                question: 'តើ queue ដំណើរការតាមគោលការណ៍អ្វី?',
+                options: ['LIFO', 'FILO', 'FIFO', 'មិនមានចម្លើយត្រឹមត្រូវ'],
+                correct: 2,
+                explanation: 'Queue ដំណើរការតាម FIFO (First In First Out) – អ្នកចូលមុន គឺចេញមុន។'
+            },
+            {
+                id: 25,
+                question: 'តើអ្វីជាភាពស្មុគស្មាញនៃប្រតិបត្តិការ push លើ stack ដែលអនុវត្តដោយ linked list?',
+                options: ['O(n)', 'O(log n)', 'O(1)', 'O(n²)'],
+                correct: 2,
+                explanation: 'Push លើ stack (linked list) គ្រាន់តែបន្ថែម node ថ្មីនៅ head ដែល O(1)។'
+            },
+            {
+                id: 26,
+                question: 'តើអ្វីជាភាពស្មុគស្មាញនៃប្រតិបត្តិការ dequeue លើ queue ដែលអនុវត្តដោយ list (ប្រើ pop(0))?',
+                options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'],
+                correct: 2,
+                explanation: '`pop(0)` លើ list ត្រូវការផ្លាស់ទីធាតុទាំងអស់ទៅឆ្វេងមួយជំហាន ដូច្នេះ O(n)។'
+            },
+            {
+                id: 27,
+                question: 'តើអ្វីជាគុណវិបត្តិនៃ singly linked list បើប្រៀបធៀបនឹង doubly linked list?',
+                options: ['ប្រើអង្គចងចាំច្រើនជាង', 'មិនអាចឆ្លងកាត់ថយក្រោយ (backward traversal) បានទេ',
+                    'បន្ថែមធាតុយឺតជាង', 'លុបធាតុយឺតជាង'
+                ],
+                correct: 1,
+                explanation: 'Singly linked list មានតែ pointer ទៅ next node ដូច្នេះមិនអាចឆ្លងកាត់ថយក្រោយបានទេ។'
+            },
+            {
+                id: 28,
+                question: 'តើក្នុងករណីអ្វីខ្លះដែលគួរប្រើ circular linked list?',
+                options: ['ពេលដែលត្រូវការចូលដំណើរការតាម index',
+                    'ពេលដែលត្រូវការឆ្លងកាត់រង្វិលជុំ (round-robin scheduling)',
+                    'ពេលដែលត្រូវការស្វែងរកលឿន', 'ពេលដែលត្រូវការប្រើអង្គចងចាំតិច'
+                ],
+                correct: 1,
+                explanation: 'Circular linked list ស័ក្តិសមសម្រាប់កម្មវិធីដែលត្រូវការឆ្លងកាត់ជារង្វិល ដូចជា round-robin scheduling នៅក្នុង OS។'
+            },
+            {
+                id: 29,
+                question: 'តើប្រតិបត្តិការ `peek()` លើ stack ធ្វើអ្វី?',
+                options: ['យកធាតុកំពូលចេញ', 'មើលធាតុកំពូលដោយមិនលុបវា', 'បន្ថែមធាតុថ្មី',
+                    'លុបធាតុទាំងអស់'
+                ],
+                correct: 1,
+                explanation: '`peek()` (ឬ `top()`) ប្រើដើម្បីមើលតម្លៃនៃធាតុកំពូលដោយមិនលុបវាចេញពី stack។'
+            },
+            {
+                id: 30,
+                question: 'តើអាចអនុវត្ត queue ដោយប្រើ stack ចំនួនប៉ុន្មាន?',
+                options: ['1', '2', '3', '4'],
+                correct: 1,
+                explanation: 'ត្រូវការ stack យ៉ាងតិច ២ ដើម្បីអនុវត្ត queue – មួយសម្រាប់ enqueue និងមួយទៀតសម្រាប់ dequeue។'
+            },
+            {
+                id: 31,
+                question: 'តើអ្វីជាការប្រើប្រាស់ stack ក្នុងជីវិតពិត?',
+                options: ['Print queue', 'Undo/Redo functionality', 'Scheduling processes',
+                    'Breadth-first search'
+                ],
+                correct: 1,
+                explanation: 'Stack ប្រើសម្រាប់ Undo/Redo ក្នុងកម្មវិធីកែអត្ថបទ និង function call stack ក្នុងកម្មវិធី។'
+            },
+            {
+                id: 32,
+                question: 'តើអ្វីជាការប្រើប្រាស់ queue ក្នុងជីវិតពិត?',
+                options: ['Function call stack', 'Print spooling (ម៉ាស៊ីនបោះពុម្ព)', 'Undo/Redo',
+                    'Expression evaluation'
+                ],
+                correct: 1,
+                explanation: 'Queue ប្រើសម្រាប់ការគ្រប់គ្រងការបោះពុម្ព (print spooling) និងការគ្រប់គ្រងដំណើរការ (process scheduling)។'
+            },
+            {
+                id: 33,
+                question: 'តើអ្វីជាភាពស្មុគស្មាញនៃការលុប node ចុងក្រោយ (tail) ក្នុង singly linked list (មានតែ head pointer)?',
+                options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'],
+                correct: 2,
+                explanation: 'ត្រូវការឆ្លងកាត់បញ្ជីទាំងមូលដើម្បីរក node មុន tail ដូច្នេះ O(n)។'
+            },
+            {
+                id: 34,
+                question: 'តើរចនាសម្ព័ន្ធទិន្នន័យអ្វីដែលស័ក្តិសមបំផុតសម្រាប់ការអនុវត្ត BFS (Breadth-First Search)?',
+                options: ['Stack', 'Queue', 'Array', 'Linked List'],
+                correct: 1,
+                explanation: 'BFS ប្រើ queue (FIFO) ដើម្បីរក្សាទុក vertices ដែលត្រូវទស្សនាតាមលំដាប់ FIFO។'
+            },
+            {
+                id: 35,
+                question: 'តើរចនាសម្ព័ន្ធទិន្នន័យអ្វីដែលស័ក្តិសមបំផុតសម្រាប់ DFS (Depth-First Search)?',
+                options: ['Queue', 'Stack', 'Priority Queue', 'Hash Table'],
+                correct: 1,
+                explanation: 'DFS ប្រើ stack (LIFO) ឬ recursion ដើម្បីឆ្លងកាត់តាមជម្រៅ។'
+            },
+            {
+                id: 36,
+                question: 'តើ binary tree មានលក្ខណៈពិសេសអ្វី?',
+                options: ['ថ្នាំងនីមួយៗមានកូនយ៉ាងច្រើន ២', 'ថ្នាំងនីមួយៗមានកូនយ៉ាងច្រើន ៣',
+                    'ថ្នាំងទាំងអស់មានកូន ២', 'គ្មានចម្លើយត្រឹមត្រូវ'
+                ],
+                correct: 0,
+                explanation: 'Binary tree ជាមែកធាងដែលថ្នាំងនីមួយៗមានកូនអតិបរមា ២ (left និង right)។'
+            },
+            {
+                id: 37,
+                question: 'តើអ្វីជាលំដាប់នៃ in-order traversal សម្រាប់ binary tree?',
+                options: ['Root → Left → Right', 'Left → Root → Right', 'Left → Right → Root',
+                    'Right → Root → Left'
+                ],
+                correct: 1,
+                explanation: 'In-order traversal ដើរ Left → Root → Right ដែលផ្តល់តម្លៃតម្រៀបសម្រាប់ BST។'
+            },
+            {
+                id: 38,
+                question: 'តើ BST (Binary Search Tree) មានលក្ខណៈសម្បត្តិអ្វី?',
+                options: ['តម្លៃនៃ left subtree តូចជាង root និង right subtree ធំជាង root',
+                    'តម្លៃនៃ left subtree ធំជាង root', 'ថ្នាំងទាំងអស់មានតម្លៃស្មើគ្នា',
+                    'មិនមាន left subtree'
+                ],
+                correct: 0,
+                explanation: 'BST មានលក្ខណៈសម្បត្តិថា left subtree មានតម្លៃតូចជាង root ហើយ right subtree មានតម្លៃធំជាង root។'
+            },
+            {
+                id: 39,
+                question: 'តើភាពស្មុគស្មាញនៃការស្វែងរកក្នុង BST (មានតុល្យភាព) គឺជាអ្វី?',
+                options: ['O(n)', 'O(log n)', 'O(n log n)', 'O(1)'],
+                correct: 1,
+                explanation: 'នៅពេល BST មានតុល្យភាព កម្ពស់មែកធាងគឺ O(log n) ដូច្នេះការស្វែងរកគឺ O(log n)។'
+            },
+            {
+                id: 40,
+                question: 'តើ heap ប្រភេទណាដែល root មានតម្លៃតូចបំផុត?',
+                options: ['Max Heap', 'Min Heap', 'Binary Heap', 'Fibonacci Heap'],
+                correct: 1,
+                explanation: 'Min Heap មានលក្ខណៈសម្បត្តិថា parent node តូចជាងកូន ដូច្នេះ root គឺជាតម្លៃតូចបំផុត។'
+            },
+            {
+                id: 41,
+                question: 'តើអ្វីជាភាពស្មុគស្មាញនៃការបញ្ចូល (insert) ធាតុក្នុង heap?',
+                options: ['O(1)', 'O(log n)', 'O(n)', 'O(n log n)'],
+                correct: 1,
+                explanation: 'Insert ក្នុង heap ត្រូវការ heapify up ដែលមានភាពស្មុគស្មាញ O(log n) ព្រោះកម្ពស់ heap គឺ log₂(n)។'
+            },
+            {
+                id: 42,
+                question: 'តើក្បួនដោះស្រាយ heap sort មានភាពស្មុគស្មាញអ្វី?',
+                options: ['O(n)', 'O(n log n)', 'O(n²)', 'O(log n)'],
+                correct: 1,
+                explanation: 'Heap sort មានភាពស្មុគស្មាញ O(n log n) ក្នុងករណីទាំងអស់ (best, average, worst)។'
+            },
+            {
+                id: 43,
+                question: 'តើ priority queue អាចអនុវត្តបានដោយរចនាសម្ព័ន្ធទិន្នន័យអ្វី?',
+                options: ['Stack', 'Queue', 'Heap', 'Linked List'],
+                correct: 2,
+                explanation: 'Priority queue ត្រូវបានអនុវត្តយ៉ាងមានប្រសិទ្ធភាពដោយប្រើ heap (ជាពិសេស binary heap)។'
+            },
+            {
+                id: 44,
+                question: 'តើអ្វីជាលក្ខណៈនៃ complete binary tree?',
+                options: ['គ្រប់ level ត្រូវបានបំពេញលើកលែងតែ level ចុងក្រោយ',
+                    'គ្រប់ nodes មានកូន ២', 'កម្ពស់ស្មើនឹងចំនួន nodes', 'គ្មានចម្លើយត្រឹមត្រូវ'
+                ],
+                correct: 0,
+                explanation: 'Complete binary tree គឺជាមែកធាងដែលគ្រប់ level ត្រូវបានបំពេញ លើកលែងតែ level ចុងក្រោយដែលត្រូវបានបំពេញពីឆ្វេងទៅស្តាំ។'
+            },
+            {
+                id: 45,
+                question: 'តើ expression tree ប្រើសម្រាប់អ្វី?',
+                options: ['តំណាងឱ្យកន្សោមគណិតវិទ្យា', 'ស្វែងរកទិន្នន័យ', 'តម្រៀបទិន្នន័យ',
+                    'បង្ហាប់ទិន្នន័យ'
+                ],
+                correct: 0,
+                explanation: 'Expression tree គឺជា binary tree ដែលប្រើសម្រាប់តំណាងឱ្យកន្សោមគណិតវិទ្យា (operators និង operands)។'
+            },
+            {
+                id: 46,
+                question: 'តើ pre-order traversal នៃ expression tree ផ្តល់អ្វី?',
+                options: ['Infix notation', 'Postfix notation', 'Prefix notation', 'មិនមានចម្លើយត្រឹមត្រូវ'],
+                correct: 2,
+                explanation: 'Pre-order traversal (Root → Left → Right) នៃ expression tree ផ្តល់ prefix notation (Polish notation)។'
+            },
+            {
+                id: 47,
+                question: 'តើការលុប node ក្នុង BST មានករណីប៉ុន្មាន?',
+                options: ['1', '2', '3', '4'],
+                correct: 2,
+                explanation: 'មាន ៣ ករណី៖ (១) គ្មានកូន, (២) មានកូន ១, (៣) មានកូន ២។'
+            },
+            {
+                id: 48,
+                question: 'តើអ្វីជាភាពស្មុគស្មាញនៃការស្វែងរក minimum ក្នុង BST?',
+                options: ['O(1)', 'O(log n)', 'O(n)', 'O(n log n)'],
+                correct: 1,
+                explanation: 'Minimum ក្នុង BST គឺជា leftmost node ដែលអាចរកបានដោយឆ្លងកាត់ left children រហូតដល់ចប់ ដែល O(log n) សម្រាប់ BST មានតុល្យភាព។'
+            },
+            {
+                id: 49,
+                question: 'តើ heap រក្សាទុកធាតុតាមរចនាសម្ព័ន្ធអ្វី?',
+                options: ['Linked List', 'Array (ជាមួយ index ចាប់ផ្តើមពី 1)', 'Stack', 'Queue'],
+                correct: 1,
+                explanation: 'Heap ត្រូវបានអនុវត្តដោយ array ដែលកូនរបស់ node នៅ index i គឺ 2i និង 2i+1 (ចាប់ផ្តើមពី index 1)។'
+            },
+            {
+                id: 50,
+                question: 'តើអ្វីជាគោលបំណងរបស់ heapify operation?',
+                options: ['បង្កើត heap ថ្មី', 'រក្សា heap property បន្ទាប់ពីការបញ្ចូល ឬលុប',
+                    'តម្រៀប heap', 'លុប heap ទាំងមូល'
+                ],
+                correct: 1,
+                explanation: 'Heapify គឺជាដំណើរការដែលប្រើដើម្បីស្ដារ heap property ឡើងវិញបន្ទាប់ពីការបញ្ចូល ឬលុបធាតុ។'
+            }
+        ];
+
+        // ============================================================
+        //  APP STATE
+        // ============================================================
+        const TOTAL_QUESTIONS = questions.length;
+        const TOTAL_TIME = 60;
+        let currentIndex = 0;
+        let userAnswers = new Array(TOTAL_QUESTIONS).fill(null);
+        let quizCompleted = false;
+        let timerInterval = null;
+        let timeRemaining = TOTAL_TIME * 60;
+        let studentInfo = {
+            name: '',
+            id: '',
+            group: '',
+            shift: '',
+            examDate: ''
+        };
+
+        // DOM refs
+        const studentInfoDiv = document.getElementById('studentInfo');
+        const quizSection = document.getElementById('quizSection');
+        const studentForm = document.getElementById('studentForm');
+        const studentNameInput = document.getElementById('studentName');
+        const studentIDInput = document.getElementById('studentID');
+        const studentGroupInput = document.getElementById('studentGroup');
+        const studentShiftSelect = document.getElementById('studentShift');
+
+        const qNumberEl = document.getElementById('qNumber');
+        const qTextEl = document.getElementById('qText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const explanationBox = document.getElementById('explanationBox');
+        const explanationText = document.getElementById('explanationText');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const retryBtn = document.getElementById('retryBtn');
+        const changeInfoBtn = document.getElementById('changeInfoBtn');
+        const downloadPDFBtn = document.getElementById('downloadPDFBtn');
+        const downloadExcelBtn = document.getElementById('downloadExcelBtn');
+        const copyTelegramBtn = document.getElementById('copyTelegramBtn');
+        const viewResultBtn = document.getElementById('viewResultBtn');
+        const progressFill = document.getElementById('progressFill');
+        const qCounter = document.getElementById('qCounter');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const questionArea = document.getElementById('questionArea');
+        const resultBox = document.getElementById('resultBox');
+        const finalScore = document.getElementById('finalScore');
+        const gradeText = document.getElementById('gradeText');
+        const gradeDetail = document.getElementById('gradeDetail');
+        const correctCount = document.getElementById('correctCount');
+        const wrongCount = document.getElementById('wrongCount');
+        const unansweredCount = document.getElementById('unansweredCount');
+
+        const timerDisplay = document.getElementById('timerDisplay');
+        const timerFill = document.getElementById('timerFill');
+        const timerOverlay = document.getElementById('timerOverlay');
+
+        const displayName = document.getElementById('displayName');
+        const displayID = document.getElementById('displayID');
+        const displayGroup = document.getElementById('displayGroup');
+        const displayShift = document.getElementById('displayShift');
+
+        const resultName = document.getElementById('resultName');
+        const resultID = document.getElementById('resultID');
+        const resultGroup = document.getElementById('resultGroup');
+        const resultShift = document.getElementById('resultShift');
+        const resultDate = document.getElementById('resultDate');
+
+        const toast = document.getElementById('toast');
+
+        // Admin panel
+        const adminPanel = document.getElementById('adminPanel');
+        const adminTableBody = document.getElementById('adminTableBody');
+        const adminDownloadExcel = document.getElementById('adminDownloadExcel');
+        const adminClearData = document.getElementById('adminClearData');
+        const adminClose = document.getElementById('adminClose');
+        const headerTitle = document.getElementById('headerTitle');
+
+        // ============================================================
+        //  TOAST
+        // ============================================================
+        function showToast(msg) {
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // ============================================================
+        //  DATE
+        // ============================================================
+        function getFormattedDate() {
+            const now = new Date();
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const y = now.getFullYear();
+            const m = months[now.getMonth()];
+            const d = String(now.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
+        function getFullDate() {
+            const now = new Date();
+            const months = ['មករា', 'កុម្ភៈ', 'មីនា', 'មេសា', 'ឧសភា', 'មិថុនា', 'កក្កដា', 'សីហា', 'កញ្ញា', 'តុលា', 'វិច្ឆិកា',
+                'ធ្នូ'
+            ];
+            const d = String(now.getDate()).padStart(2, '0');
+            const m = months[now.getMonth()];
+            const y = now.getFullYear();
+            return `${d} ${m} ${y}`;
+        }
+
+        // ============================================================
+        //  LOCALSTORAGE - SAVE / LOAD
+        // ============================================================
+        function saveResultToStorage(data) {
+            let records = JSON.parse(localStorage.getItem('examRecords') || '[]');
+            records.push(data);
+            localStorage.setItem('examRecords', JSON.stringify(records));
+        }
+
+        function loadRecordsFromStorage() {
+            return JSON.parse(localStorage.getItem('examRecords') || '[]');
+        }
+
+        function clearAllRecords() {
+            localStorage.removeItem('examRecords');
+        }
+
+        // ============================================================
+        //  STUDENT FORM
+        // ============================================================
+        studentForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = studentNameInput.value.trim();
+            const id = studentIDInput.value.trim();
+            const group = studentGroupInput.value.trim() || 'មិនបានបញ្ជាក់';
+            const shift = studentShiftSelect.value;
+
+            if (!name || !id) {
+                alert('សូមបំពេញឈ្មោះ និងលេខសម្គាល់និស្សិត។');
+                return;
+            }
+
+            studentInfo.name = name;
+            studentInfo.id = id;
+            studentInfo.group = group;
+            studentInfo.shift = shift;
+            studentInfo.examDate = getFormattedDate();
+
+            displayName.textContent = name;
+            displayID.textContent = id;
+            displayGroup.textContent = group;
+            displayShift.textContent = shift;
+
+            studentInfoDiv.style.display = 'none';
+            quizSection.style.display = 'block';
+
+            resetQuizState();
+            startTimer();
+        });
+
+        // ============================================================
+        //  TIMER
+        // ============================================================
+        function startTimer() {
+            timeRemaining = TOTAL_TIME * 60;
+            updateTimerDisplay();
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    timerOverlay.classList.add('show');
+                    setTimeout(() => {
+                        timerOverlay.classList.remove('show');
+                        if (!quizCompleted) {
+                            submitQuiz();
+                        }
+                    }, 2000);
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(timeRemaining / 60);
+            const secs = timeRemaining % 60;
+            timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            const pct = (timeRemaining / (TOTAL_TIME * 60)) * 100;
+            timerFill.style.width = `${pct}%`;
+            timerFill.classList.remove('warning', 'danger');
+            timerDisplay.classList.remove('warning');
+            if (pct < 20) { timerFill.classList.add('danger');
+                timerDisplay.classList.add('warning'); } else if (pct < 40) { timerFill.classList.add('warning');
+                timerDisplay.classList.add('warning'); }
+        }
+
+        // ============================================================
+        //  QUIZ
+        // ============================================================
+        function resetQuizState() {
+            userAnswers.fill(null);
+            quizCompleted = false;
+            currentIndex = 0;
+            resultBox.classList.remove('show');
+            questionArea.style.display = 'block';
+            timerOverlay.classList.remove('show');
+            renderQuestion(0);
+            explanationBox.classList.remove('show');
+            document.querySelectorAll('.option').forEach(el => el.classList.remove('correct-answer', 'wrong-answer'));
+            scoreDisplay.textContent = `ឆ្លើយរួច 0 / ${TOTAL_QUESTIONS}`;
+            progressFill.style.width = '0%';
+            submitBtn.classList.add('hidden');
+            nextBtn.classList.remove('hidden');
+            if (timerInterval) { clearInterval(timerInterval);
+                timerInterval = null; }
+            updateTimerDisplay();
+        }
+
+        function renderQuestion(index) {
+            const q = questions[index];
+            qNumberEl.textContent = `សំណួរទី ${index + 1}`;
+            qTextEl.innerHTML = q.question;
+            const letters = ['A', 'B', 'C', 'D'];
+            optionsContainer.innerHTML = '';
+            q.options.forEach((opt, i) => {
+                const div = document.createElement('div');
+                div.className = 'option';
+                if (userAnswers[index] === i) div.classList.add('selected');
+                div.innerHTML =
+                    `<span class="letter">${letters[i]}</span><span class="text">${opt}</span>`;
+                div.addEventListener('click', () => selectOption(index, i));
+                optionsContainer.appendChild(div);
+            });
+            explanationBox.classList.remove('show');
+            explanationText.textContent = '';
+            prevBtn.disabled = (index === 0);
+            const isLast = (index === TOTAL_QUESTIONS - 1);
+            nextBtn.classList.toggle('hidden', isLast);
+            submitBtn.classList.toggle('hidden', !isLast);
+            const pct = ((index + 1) / TOTAL_QUESTIONS) * 100;
+            progressFill.style.width = `${pct}%`;
+            qCounter.textContent = `សំណួរ ${index + 1} / ${TOTAL_QUESTIONS}`;
+            const answered = userAnswers.filter(a => a !== null).length;
+            scoreDisplay.textContent = `ឆ្លើយរួច ${answered} / ${TOTAL_QUESTIONS}`;
+        }
+
+        function selectOption(index, selected) {
+            if (quizCompleted) return;
+            userAnswers[index] = selected;
+            renderQuestion(currentIndex);
+            const answered = userAnswers.filter(a => a !== null).length;
+            scoreDisplay.textContent = `ឆ្លើយរួច ${answered} / ${TOTAL_QUESTIONS}`;
+        }
+
+        function goTo(index) {
+            if (index < 0 || index >= TOTAL_QUESTIONS) return;
+            currentIndex = index;
+            renderQuestion(index);
+        }
+
+        function nextQuestion() { if (currentIndex < TOTAL_QUESTIONS - 1) goTo(currentIndex + 1); }
+
+        function prevQuestion() { if (currentIndex > 0) goTo(currentIndex - 1); }
+
+        // ============================================================
+        //  SUBMIT
+        // ============================================================
+        function submitQuiz() {
+            if (quizCompleted) return;
+            if (timerInterval) { clearInterval(timerInterval);
+                timerInterval = null; }
+
+            const unanswered = userAnswers.filter(a => a === null).length;
+            if (unanswered > 0) {
+                if (!confirm(`អ្នកមិនទាន់ឆ្លើយ ${unanswered} សំណួរ។ តើអ្នកចង់បញ្ចប់មែនទេ?`)) {
+                    if (!timerInterval && timeRemaining > 0) startTimer();
+                    return;
+                }
+            }
+
+            quizCompleted = true;
+            questionArea.style.display = 'none';
+            resultBox.classList.add('show');
+
+            let correct = 0,
+                wrong = 0,
+                unansweredCountVal = 0;
+            for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+                const ans = userAnswers[i];
+                if (ans === null) unansweredCountVal++;
+                else if (ans === questions[i].correct) correct++;
+                else wrong++;
+            }
+            const score = Math.round((correct / TOTAL_QUESTIONS) * 100);
+
+            resultName.textContent = studentInfo.name;
+            resultID.textContent = studentInfo.id;
+            resultGroup.textContent = studentInfo.group;
+            resultShift.textContent = studentInfo.shift;
+            resultDate.textContent = getFullDate();
+
+            finalScore.textContent = score;
+            correctCount.textContent = correct;
+            wrongCount.textContent = wrong;
+            unansweredCount.textContent = unansweredCountVal;
+
+            let grade, detail;
+            if (score >= 90) { grade = 'ពូកែ (Excellent)';
+                detail = 'អស្ចារ្យ! អ្នកមានចំណេះដឹងជ្រៅជ្រះ'; } else if (score >= 75) { grade = 'ល្អ (Good)';
+                detail = 'ល្អណាស់! អ្នកយល់ច្បាស់ពីគោលគំនិតសំខាន់ៗ'; } else if (score >= 50) { grade = 'មធ្យម (Average)';
+                detail = 'គួរតែត្រួតពិនិត្យឡើងវិញនូវផ្នែកដែលអ្នកខ្សោយ'; } else { grade = 'ត្រូវការកែលម្អ (Needs Improvement)';
+                detail = 'សូមអានសៀវភៅឡើងវិញ និងអនុវត្តកូដបន្ថែមទៀត។'; }
+            gradeText.textContent = grade;
+            gradeDetail.textContent = detail;
+
+            // Save to localStorage (hidden from student)
+            const record = {
+                id: studentInfo.id,
+                name: studentInfo.name,
+                group: studentInfo.group,
+                shift: studentInfo.shift,
+                date: studentInfo.examDate,
+                score: score,
+                correct: correct,
+                wrong: wrong,
+                unanswered: unansweredCountVal,
+                total: TOTAL_QUESTIONS,
+                timestamp: new Date().toISOString()
+            };
+            saveResultToStorage(record);
+
+            // Update admin panel if visible
+            if (adminPanel.classList.contains('show')) {
+                renderAdminTable();
+            }
+        }
+
+        // ============================================================
+        //  ADMIN PANEL (hidden - click title 5 times)
+        // ============================================================
+        let titleClickCount = 0;
+        let titleClickTimer = null;
+
+        headerTitle.addEventListener('click', function() {
+            titleClickCount++;
+            if (titleClickTimer) clearTimeout(titleClickTimer);
+            titleClickTimer = setTimeout(() => { titleClickCount = 0; }, 1000);
+            if (titleClickCount >= 5) {
+                titleClickCount = 0;
+                adminPanel.classList.toggle('show');
+                if (adminPanel.classList.contains('show')) {
+                    renderAdminTable();
+                    showToast('🔐 បានបើកទំព័រគ្រប់គ្រង');
+                } else {
+                    showToast('🔒 បានបិទទំព័រគ្រប់គ្រង');
+                }
+            }
+        });
+
+        function renderAdminTable() {
+            const records = loadRecordsFromStorage();
+            adminTableBody.innerHTML = '';
+            if (records.length === 0) {
+                adminTableBody.innerHTML =
+                    '<tr><td colspan="6" style="text-align:center;color:#6b7a8f;">មិនទាន់មានទិន្នន័យ</td></tr>';
+                return;
+            }
+            // Show newest first
+            records.reverse().forEach(r => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                        <td>${r.id || '-'}</td>
+                        <td>${r.name || '-'}</td>
+                        <td>${r.group || '-'}</td>
+                        <td>${r.shift || '-'}</td>
+                        <td>${r.date || '-'}</td>
+                        <td>${r.score || 0}</td>
+                    `;
+                adminTableBody.appendChild(tr);
+            });
+        }
+
+        // Admin: Download all records as CSV
+        adminDownloadExcel.addEventListener('click', function() {
+            const records = loadRecordsFromStorage();
+            if (records.length === 0) {
+                alert('មិនមានទិន្នន័យដើម្បីទាញយកទេ។');
+                return;
+            }
+            const headers = ['ID', 'ឈ្មោះ', 'ក្រុម', 'វេន', 'កាលបរិច្ឆេទប្រឡង', 'ពិន្ទុប្រឡង', 'ត្រឹមត្រូវ', 'ខុស',
+                'មិនទាន់ឆ្លើយ'
+            ];
+            let csv = '\uFEFF' + headers.join(',') + '\n';
+            records.forEach(r => {
+                const row = [
+                    r.id || '', r.name || '', r.group || '', r.shift || '',
+                    r.date || '', r.score || 0, r.correct || 0, r.wrong || 0, r.unanswered || 0
+                ];
+                csv += row.join(',') + '\n';
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `ទិន្នន័យប្រឡងទាំងអស់_${getFormattedDate()}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+            showToast('📊 បានទាញយក Excel ទាំងអស់ជោគជ័យ!');
+        });
+
+        adminClearData.addEventListener('click', function() {
+            if (confirm('តើអ្នកចង់សម្អាតទិន្នន័យទាំងអស់មែនទេ? (មិនអាចស្ដារឡើងវិញបានទេ)')) {
+                clearAllRecords();
+                renderAdminTable();
+                showToast('🗑️ បានសម្អាតទិន្នន័យទាំងអស់');
+            }
+        });
+
+        adminClose.addEventListener('click', function() {
+            adminPanel.classList.remove('show');
+            showToast('🔒 បានបិទទំព័រគ្រប់គ្រង');
+        });
+
+        // ============================================================
+        //  DOWNLOAD EXCEL (Student's own result)
+        // ============================================================
+        function downloadStudentExcel() {
+            const name = studentInfo.name;
+            const id = studentInfo.id;
+            const group = studentInfo.group;
+            const shift = studentInfo.shift;
+            const date = studentInfo.examDate || getFormattedDate();
+            const score = document.getElementById('finalScore').textContent;
+            const correct = document.getElementById('correctCount').textContent;
+            const wrong = document.getElementById('wrongCount').textContent;
+            const unanswered = document.getElementById('unansweredCount').textContent;
+
+            const headers = ['ID', 'ឈ្មោះ', 'ក្រុម', 'វេន', 'កាលបរិច្ឆេទប្រឡង', 'ពិន្ទុប្រឡង', 'ត្រឹមត្រូវ', 'ខុស',
+                'មិនទាន់ឆ្លើយ'
+            ];
+            const row = [id, name, group, shift, date, score, correct, wrong, unanswered];
+            let csv = '\uFEFF' + headers.join(',') + '\n' + row.join(',') + '\n';
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `លទ្ធផល_${id}_${studentInfo.examDate}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+            showToast('📊 បានទាញយក Excel ជោគជ័យ!');
+        }
+
+        // ============================================================
+        //  PDF
+        // ============================================================
+        function downloadPDF() {
+            const el = document.getElementById('resultBox');
+            html2canvas(el, { scale: 2, useCORS: true, backgroundColor: '#ffffff' }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF('p', 'mm', 'a4');
+                const w = 190,
+                    h = (canvas.height * w) / canvas.width;
+                doc.addImage(imgData, 'PNG', 10, 10, w, h);
+                doc.save(`លទ្ធផល_${studentInfo.id}.pdf`);
+                showToast('📥 បានទាញយក PDF ជោគជ័យ!');
+            }).catch(() => alert('មានបញ្ហាក្នុងការបង្កើត PDF។'));
+        }
+
+        // ============================================================
+        //  COPY TELEGRAM
+        // ============================================================
+        function copyTelegram() {
+            const text =
+                `📊 *លទ្ធផលប្រឡង DSA* 📊\n\n` +
+                `👤 ឈ្មោះ: ${studentInfo.name}\n` +
+                `🆔 ID: ${studentInfo.id}\n` +
+                `📁 ក្រុម: ${studentInfo.group}\n` +
+                `⏰ វេន: ${studentInfo.shift}\n` +
+                `📅 កាលបរិច្ឆេទ: ${getFullDate()}\n\n` +
+                `🏆 ពិន្ទុសរុប: ${document.getElementById('finalScore').textContent} / 100\n` +
+                `✅ ត្រឹមត្រូវ: ${document.getElementById('correctCount').textContent}\n` +
+                `❌ ខុស: ${document.getElementById('wrongCount').textContent}\n` +
+                `⬜ មិនទាន់ឆ្លើយ: ${document.getElementById('unansweredCount').textContent}\n\n` +
+                `⏱ រយៈពេលប្រឡង: ៦០ នាទី`;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => showToast('📋 ចម្លងជោគជ័យ!'));
+            } else {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.cssText = 'position:fixed;opacity:0;';
+                document.body.appendChild(ta);
+                ta.select();
+                try { document.execCommand('copy');
+                    showToast('📋 ចម្លងជោគជ័យ!'); } catch (e) { alert(text); }
+                document.body.removeChild(ta);
+            }
+        }
+
+        // ============================================================
+        //  RESET / RETRY / CHANGE INFO
+        // ============================================================
+        function resetQuiz() {
+            if (timerInterval) { clearInterval(timerInterval);
+                timerInterval = null; }
+            timerOverlay.classList.remove('show');
+            resetQuizState();
+            startTimer();
+        }
+
+        function goBackToInfo() {
+            if (timerInterval) { clearInterval(timerInterval);
+                timerInterval = null; }
+            timerOverlay.classList.remove('show');
+            studentInfoDiv.style.display = 'block';
+            quizSection.style.display = 'none';
+            userAnswers.fill(null);
+            quizCompleted = false;
+            adminPanel.classList.remove('show');
+        }
+
+        // ============================================================
+        //  EVENT LISTENERS
+        // ============================================================
+        prevBtn.addEventListener('click', prevQuestion);
+        nextBtn.addEventListener('click', nextQuestion);
+        submitBtn.addEventListener('click', submitQuiz);
+        resetBtn.addEventListener('click', resetQuiz);
+        retryBtn.addEventListener('click', resetQuiz);
+        changeInfoBtn.addEventListener('click', goBackToInfo);
+        downloadPDFBtn.addEventListener('click', downloadPDF);
+        downloadExcelBtn.addEventListener('click', downloadStudentExcel);
+        copyTelegramBtn.addEventListener('click', copyTelegram);
+        viewResultBtn.addEventListener('click', function() {
+            timerOverlay.classList.remove('show');
+            if (!quizCompleted) submitQuiz();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (quizCompleted) return;
+            if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault();
+                nextQuestion(); } else if (e.key === 'ArrowLeft') { e.preventDefault();
+                prevQuestion(); }
+        });
+
+        // ============================================================
+        //  INIT
+        // ============================================================
+        studentInfoDiv.style.display = 'block';
+        quizSection.style.display = 'none';
+    </script>
+</body>
+</html>
