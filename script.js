@@ -87,7 +87,7 @@ const questions = [
     {
         id: 3,
         question: 'តើអ្វីជាលទ្ធផលនៃកូដ `print(type(10.5))`?',
-        options: ['<class "int">', '<class "float">', '<class "complex">', '<class "str">']
+        options: ['class "int"', 'class "float"', 'class "complex"', 'class "str"']
     },
     {
         id: 4,
